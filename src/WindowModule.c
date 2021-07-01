@@ -247,7 +247,7 @@ void centerWindow(WMwindow* window) {
 
 void moveWindow(WMwindow* window, unsigned int x, unsigned int y) {
 #if defined(_WINAPI)
-	VEC2I windowSize = getWindowSize(window);
+	Vec2i windowSize = getWindowSize(window);
 	MoveWindow(window->windowProperties.hwnd, x, y, windowSize.x, windowSize.y, FALSE);
 #endif
 #if defined(_X11)
@@ -299,7 +299,7 @@ BOOL enterFullscreen(WMwindow* window) {
 #if defined(_WINAPI)
 	DEVMODE fullscreenSettings;
 	RECT windowBoundary;
-	VEC2I resolution = getDesktopResolution();
+	Vec2i resolution = getDesktopResolution();
 
 	EnumDisplaySettings(NULL, 0, &fullscreenSettings);
 	fullscreenSettings.dmPelsWidth = resolution.x;
@@ -453,7 +453,7 @@ WMwindow createWindow(const char* title, unsigned int width, unsigned int height
 	if (!RegisterClassEx(&window.windowProperties.wc))
 		MessageBox(NULL, "Window Registration Failed!", "Error!", MB_ICONEXCLAMATION | MB_OK);
 
-	VEC2I resolution = getDesktopResolution();
+	Vec2i resolution = getDesktopResolution();
 
 	switch (windowType) {
 	case WINDOW_NORMAL:
@@ -502,7 +502,7 @@ WMwindow createWindow(const char* title, unsigned int width, unsigned int height
 	if (!RegisterClassEx(&window.windowProperties.wc))
 		MessageBox(NULL, L"Window Registration Failed!", L"Error!", MB_ICONEXCLAMATION | MB_OK);
 
-	VEC2I resolution = getDesktopResolution();
+	Vec2i resolution = getDesktopResolution();
 
 	switch (windowType) {
 	case WINDOW_NORMAL:
@@ -626,8 +626,8 @@ WMwindow createWindow(const char* title, unsigned int width, unsigned int height
 }
 
 #if defined(_WINAPI)
-VEC2I getDesktopMousePosition() {
-	VEC2I pos;
+Vec2i getDesktopMousePosition() {
+	Vec2i pos;
 	POINT position;
 	GetCursorPos(&position);
 	pos.x = position.x;
@@ -636,7 +636,7 @@ VEC2I getDesktopMousePosition() {
 }
 
 // Only use it if there's a FATAL bug when resizing with the mouse.
-void mouseResizing(WINDOW* window) {
+void mouseResizing(WMwindow* window) {
 	updateWindowViewport(window);
 	ShowWindow(window->windowProperties.hwnd, SW_HIDE);
 	ShowWindow(window->windowProperties.hwnd, SW_SHOW);

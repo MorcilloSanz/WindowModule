@@ -206,7 +206,7 @@ struct WindowsEventProp {
     WPARAM wParam;
 	LPARAM lParam;
 	UINT message;
-	EVENTTYPE eventType;
+	EventType eventType;
 };
 typedef struct WindowsEventProp WindowsEventProp;
 #endif
@@ -355,8 +355,8 @@ extern TimeManagement timeManagement;
 
 #if defined(_WINAPI)
 // Mouse functions
-VEC2I getDesktopMousePosition();
-void mouseResizing(WINDOW* window);
+Vec2i getDesktopMousePosition();
+void mouseResizing(WMwindow* window);
 
 // Debug functions
 void setDebugColor(unsigned int color);
