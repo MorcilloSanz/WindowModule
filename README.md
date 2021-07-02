@@ -1,5 +1,5 @@
 ![alt text](https://github.com/MorcilloSanz/WindowModule/blob/main/img/WindowModule.png)
-### Create a window with an OpenGL context and handle it events for Linux and Windows
+### Create a window with an OpenGL context and handle its events for Linux and Windows
 
 ## Compile
 Windows MinGW
@@ -18,7 +18,7 @@ gcc main.c WindowModule.c -lX11 -lGL -lGLU -o triangle
 
 ## Example
 ```cpp
-#include "2DM.h"
+#include "WindowModule.h"
 
 int main(void) {
 
