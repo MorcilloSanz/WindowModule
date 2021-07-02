@@ -20,7 +20,7 @@ Linux GNU GCC:
 ```
 gcc main.c WindowModule.c -lX11 -lGL -lGLU -o triangle
 ```
-## Example triangle
+## OpenGL triangle example
 ```cpp
 #include "WindowModule.h"
 
