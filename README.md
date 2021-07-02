@@ -1,28 +1,32 @@
 ![alt text](https://github.com/MorcilloSanz/WindowModule/blob/main/img/WindowModule.png)
 ### Create a window with an OpenGL context and handle its events for Linux and Windows
-
-## Compile
+## Instalation
+Include these two files in your project:
+```
+WindowModule.h
+WindowModule.c
+```
+## Linker
 Windows MinGW
 ```
 gcc main.c WindowModule.c -static-libgcc -std=c11 -mwindows -lopengl32 -lglu32 -g3 -o triangle
 ```
 Windows Visual Studio
 ```
-Linker > Input > Additional Dependencies
-	opengl32.lib;glu32.lib;
+Linker > Input > Additional Dependencies:
+opengl32.lib;glu32.lib;
 ```
 Linux GNU GCC:
 ```
 gcc main.c WindowModule.c -lX11 -lGL -lGLU -o triangle
 ```
-
-## Example
+## Example triangle
 ```cpp
 #include "WindowModule.h"
 
 int main(void) {
 
-  WMwindow window = createWindow("2DM Window", 500, 500, WINDOW_NORMAL);
+  WMwindow window = createWindow("Window", 500, 500, WINDOW_NORMAL);
   centerWindow(&window);
   setIcon(&window, "icon/icon.bmp");	//.ico in windows, .bmp in linux
 
