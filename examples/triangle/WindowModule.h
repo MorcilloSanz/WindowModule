@@ -162,31 +162,6 @@ typedef const char* LPCSTR;
 
 typedef unsigned char byte;
 
-// Don't change order
-enum Key {
-	ESC = 0x1B,
-	F1 = 0x11, F2 = 0x12, F3 = 0x13, F4 = 0x14, F5 = 0x15, F6 = 0x16, F7 = 0x17, F8 = 0x18, F9 = 0x19, F10 = 0x1A, F11 = 0x1B, F12 = 0x1C,
-	PRINTSCRN = 0x2C, SCROLL_LOCK = 0x91, PAUSE = 0x13, GRAVE_ACCENT = 0xC0,
-	K0 = 0x30, K1 = 0x31, K2 = 0x32, K3 = 0x33, K4 = 0x34, K5 = 0x35, K6 = 0x36, K7 = 0x37, K8 = 0x38, K9 = 0x39,
-	MINUS = 0x6D, EQUALS = UNDEFINED_KEY,
-	BACKSPACE = 0x08, INSERT = 0x2D, HOME = UNDEFINED_KEY, PAGE_UP = UNDEFINED_KEY, LOCK = UNDEFINED_KEY, NSLASH = UNDEFINED_KEY, NASTERISK = UNDEFINED_KEY, NMINUS = UNDEFINED_KEY,
-	TAB = 0x09,
-	Q = 0x51, W = 0x57, E = 0x45, R = 0x52, T = 0x54, Y = 0x59, U = 0x55, I = 0x49, O = 0x4f, P = 0x50,
-	LEFT_BRACKET = 0xDB, RIGHT_BRACKET = 0xDD, RETURN = 0x0D, DEL = 0x2E, END = UNDEFINED_KEY, PAGE_DOWN = UNDEFINED_KEY,
-	N7 = 0x67, N8 = 0x68, N9 = 0x69, NPLUS = UNDEFINED_KEY, CAPS_LOCK = 0X14,
-	A = 0x41, S = 0x53, D = 0x44, F = 0x46, G = 0x47, H = 0x48, J = 0x4A, K = 0x4B, L = 0x4C,
-	SEMICOLON = 0xBA, APOSTROPHE = UNDEFINED_KEY,
-	N4 = 0x64, N5 = 0x65, N6 = 0x66,
-	SHIFT_LEFT = UNDEFINED_KEY, INTERNATIONAL = UNDEFINED_KEY,
-	Z = 0x5A, X = 0x58, C = 0x43, V = 0x56, B = 0x42, N = 0x4E, M = 0x4D,
-	COMMA, PERIOD, SLASH = UNDEFINED_KEY, SHIFT_RIGHT = UNDEFINED_KEY, BACKSLASH, CURSOR_UP = 0x26,
-	N1 = 0x60, N2 = 0x61, N3 = 0x62, NENTER = UNDEFINED_KEY,
-	CONTROL_LEFT = UNDEFINED_KEY, LOGO_LEFT = UNDEFINED_KEY, ALT_LEFT = UNDEFINED_KEY, SPACE = 0x20, ALT_RIGHT = UNDEFINED_KEY, LOGO_RIGHT = UNDEFINED_KEY, MENU = UNDEFINED_KEY, CONTROL_RIGHT = UNDEFINED_KEY,
-	CURSOR_LEFT = 0x25, CURSOR_DOWN = 0x28, CURSOR_RIGHT = 0x27,
-	N0 = UNDEFINED_KEY, NPERIOD = UNDEFINED_KEY
-};
-typedef enum Key Key;
-
 enum EventType {
 	NONE,
     // Window events
@@ -347,9 +322,6 @@ struct Vec2f {
 };
 typedef struct Vec2f Vec2f;
 
-extern unsigned int keys[];
-extern unsigned char keyCodes[];
-extern unsigned int keysBuffer[MAX_KEY_CODE];
 extern Event event;
 extern TimeManagement timeManagement;
 
@@ -365,6 +337,7 @@ void hideConsole();
 void showConsole();
 
 // Event callback
+uint8_t isKeyPressed(char key);
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 #endif
 
@@ -373,6 +346,7 @@ WCHAR* toWCHAR(const char* str);
 #endif
 
 #if defined(_X11)
+uint8_t isKeyPressed(WMwindow* window, char key);
 static int WndProc(WMwindow* window);
 #endif
 
@@ -383,8 +357,7 @@ void sysDelay(unsigned int ms);
 
 // Event functions
 int pollEvents(WMwindow* window);
-char ASCIItoKeyCode(char key);
-uint8_t isKeyPressed(char key);
+
 Vec2i getMousePosition(WMwindow* window);
 
 // OpenGL functions
