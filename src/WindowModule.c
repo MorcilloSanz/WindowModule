@@ -1,33 +1,6 @@
 #include "WindowModule.h"
 
-// Don't change order
-unsigned int keys[] = {
-	ESC, F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12,  PRINTSCRN, 
-    SCROLL_LOCK, PAUSE, GRAVE_ACCENT, K1, K2,  K3, K4, K5,  K6, K7, K8, 
-	K9,  K0,  MINUS, EQUALS,  BACKSPACE, INSERT,  HOME, PAGE_UP,  LOCK, 
-	NSLASH,  NASTERISK,  NMINUS,  TAB, Q,  W, E,  R, T, Y,  U, I, O, P, 
-	LEFT_BRACKET,  RIGHT_BRACKET,  RETURN, DEL, END, PAGE_DOWN, N7, N8, 
-	N9,  NPLUS,  CAPS_LOCK, A,  S,  D, F,  G,  H,  J,  K, L, SEMICOLON, 
-	APOSTROPHE , N4, N5, N6, SHIFT_LEFT, INTERNATIONAL, Z,  X, C, V, B, 
-    N, M, COMMA, PERIOD, SLASH,  SHIFT_RIGHT, BACKSLASH, CURSOR_UP, N1, 
-	N2,   N3,   NENTER,   CONTROL_LEFT,   LOGO_LEFT,  ALT_LEFT,  SPACE, 
-	ALT_RIGHT,    LOGO_RIGHT,    MENU,    CONTROL_RIGHT,   CURSOR_LEFT, 
-	CURSOR_DOWN, CURSOR_RIGHT, N0, NPERIOD
-};
-
-// Don't change order
-unsigned char keyCodes[] = {
-	9, 67,  68, 69,  70, 71, 72, 73, 74,  75, 76, 95, 96, 111,  78, 110, 49, 10, 11, 12, 13, 14, 15,
-	16, 17, 18,  19, 20, 21, 22,  106, 97, 99,  77, 112, 63, 82, 23, 24, 25, 26, 27, 28, 29, 30, 31, 
-    32, 33, 34, 35, 36, 107, 103, 105,  79, 80, 81, 86,  66, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 
-    48, 83, 84, 85, 50, 94, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 51, 98, 87, 88, 89, 108, 37, 
-    115, 64, 65, 113, 116, 117, 109, 100, 104, 102, 90, 91
-};
-
-unsigned int keysBuffer[MAX_KEY_CODE];
-
 Event event;
-
 TimeManagement timeManagement;
 
 long long getMillis(void) {
@@ -87,22 +60,24 @@ int pollEvents(WMwindow* window) {
 #endif
 }
 
-char ASCIItoKeyCode(char key) {
-	for (int i = 0; i < MAX_KEY_CODE; i++)
-		if (key == keys[i])
-			return keyCodes[i];
-	return -1;
-}
-
-uint8_t isKeyPressed(char key) {
 #if defined(_WINAPI)
+uint8_t isKeyPressed(char key) {
 	return (GetAsyncKeyState(key) < 0) ? TRUE : FALSE;
-#endif
-#if defined(_X11)
-	char keyCode = ASCIItoKeyCode(key);
-	return (keysBuffer[keyCode] == TRUE) ? TRUE : FALSE;
-#endif
 }
+#endif
+
+#if defined(_X11)
+uint8_t isKeyPressed(WMwindow* window, char key) {
+	//int spaceKey = XKeysymToKeycode(window->windowProperties.dpy, XK_space);
+	int k = XKeysymToKeycode(window->windowProperties.dpy, key);
+	char keys[32];
+	XQueryKeymap(window->windowProperties.dpy, keys);
+	if(keys[k / 8] & (0x1 << (k % 8)))
+		return true;
+
+	return false;
+}
+#endif
 
 Vec2i getMousePosition(WMwindow* window) {
 	Vec2i pos;
@@ -625,12 +600,8 @@ WMwindow createWindow(const char* title, unsigned int width, unsigned int height
 	window.height = height;
 	window.open = TRUE;
 
-	//Start timing
 	timeManagement.previousTime = getMillis();
 	timeManagement.timeStarted = TRUE;
-
-	//Keys mapping
-	memset(keysBuffer, 0, MAX_KEY_CODE);
 
 	enableOpenGL(&window);
 
@@ -792,13 +763,11 @@ int WndProc(WMwindow* window) {
 	return 1;
 	case KeyPress:
 	{
-		keysBuffer[event.eventProperties.xev.xkey.keycode] = TRUE;
 		event.eventType = KEYDOWN;
 	}
 	return 1;
 	case KeyRelease:
 	{
-		keysBuffer[event.eventProperties.xev.xkey.keycode] = FALSE;
 		event.eventType = KEYUP;
 	}
 	return 1;
