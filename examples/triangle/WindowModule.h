@@ -219,8 +219,8 @@ typedef struct LinuxEventProp LinuxEventProp;
 #endif
 
 #if defined(_X11)
-static long eventMask = ExposureMask | KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask |
-VisibilityChangeMask | StructureNotifyMask | PropertyChangeMask;
+static long eventMask = ExposureMask | KeyPressMask | KeyReleaseMask | ButtonPressMask | 
+ButtonReleaseMask | VisibilityChangeMask | StructureNotifyMask | PropertyChangeMask;
 #endif
 
 struct Event {
@@ -270,7 +270,7 @@ struct LinuxWindowProp {
 	XSetWindowAttributes swa;
 	Window win;
 	GLXContext glc;
-	XWindowAttributes gwa;
+	XWindowAttributes xwa;
 	XEvent xev;
 };
 typedef struct LinuxWindowProp LinuxWindowProp;
