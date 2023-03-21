@@ -1,6 +1,6 @@
-![alt text](https://github.com/MorcilloSanz/WindowModule/blob/main/img/WindowModule.png)
-### Create a window with an OpenGL context and handle its events for Linux and Windows
-## Instalation
+# WindowModule
+Create a window with an OpenGL context and handle its events for Linux and Windows
+## Usage
 Include these two files in your project:
 ```
 WindowModule.h
